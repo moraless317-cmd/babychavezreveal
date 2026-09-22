@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#dcebf4">
+<title>Baby Chavez | A Little Secret</title>
+<style>
+  :root{
+    --ivory:#fbf8f1;
+    --paper:#f5f0e7;
+    --ink:#183f61;
+    --muted:#657487;
+    --blue:#78a8c4;
+    --blue-dark:#4e7896;
+    --blue-pale:#e6f1f7;
+    --pink:#efd7d8;
+    --gold:#b9a27d;
+    --line:rgba(24,63,97,.20);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;font-family:Georgia,"Times New Roman",serif;color:var(--ink);background:var(--ivory)}
+  body{overflow-x:hidden}
+  button{font:inherit}
+  .screen{
+    min-height:100svh;
+    display:none;
+    place-items:center;
+    padding:34px 20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .screen.active{display:grid;animation:fade .65s ease both}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .card{
+    width:min(720px,100%);
+    min-height:min(760px,calc(100svh - 68px));
+    padding:58px 42px;
+    border:1px solid var(--line);
+    background:rgba(251,248,241,.92);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    position:relative;
+    box-shadow:0 18px 50px rgba(24,63,97,.06);
+  }
+  .eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;margin-bottom:22px}
+  h1{font-size:clamp(48px,10vw,88px);line-height:.95;font-weight:400;letter-spacing:.03em;margin:0 0 22px}
+  h2{font-size:clamp(30px,7vw,58px);font-weight:400;letter-spacing:.06em;margin:0 0 22px}
+  .script{font-style:italic;font-size:clamp(25px,5vw,38px);font-weight:400}
+  .body{font-size:18px;line-height:1.9;max-width:520px;margin:0 auto}
+  .date{letter-spacing:.34em;font-size:14px;text-transform:uppercase;margin:22px 0 34px}
+  .rule{width:90px;height:1px;background:var(--ink);opacity:.45;margin:18px auto 28px}
+  .btn{
+    border:1px solid var(--blue-dark);
+    background:var(--blue);
+    color:white;
+    padding:15px 25px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-size:12px;
+    cursor:pointer;
+    transition:.25s ease;
+    margin-top:32px;
+  }
+  .btn:hover{background:var(--blue-dark);transform:translateY(-2px)}
+  .btn.secondary{background:transparent;color:var(--ink)}
+  .leaves{position:absolute;inset:0;pointer-events:none;opacity:.6}
+  .leaf{position:absolute;width:170px;height:70px;border-top:1px solid #6d876f;border-radius:50%;transform:rotate(-28deg)}
+  .leaf:after{content:"";position:absolute;left:48%;top:-2px;width:1px;height:130px;background:#6d876f;transform:rotate(35deg)}
+  .leaf.a{top:28px;left:-45px}.leaf.b{bottom:25px;right:-45px;transform:rotate(150deg)}
+  .choices{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;margin-top:36px}
+  .choice{
+    width:170px;height:170px;border-radius:50%;border:1px solid var(--line);
+    background:white;cursor:pointer;color:var(--ink);transition:.25s ease;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    letter-spacing:.24em;text-transform:uppercase;font-size:13px;
+  }
+  .choice:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(24,63,97,.10)}
+  .choice.girl{background:#f9e9e9;border-color:#e1bfc2}
+  .choice.boy{background:#e5f1f8;border-color:#a7c9dc}
+  .choice .icon{font-size:27px;letter-spacing:0;margin-bottom:10px}
+  .lock{font-size:48px;margin-bottom:25px}
+  .small{font-size:13px;font-style:italic;opacity:.7;margin-top:24px}
+  .pause{
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,.85), transparent 30%),
+      linear-gradient(145deg,#eef6fa,#f7fbfc 50%,#e6f1f7);
+  }
+  .reveal{
+    background:
+      radial-gradient(circle at 50% 20%, rgba(255,255,255,.9), transparent 32%),
+      linear-gradient(145deg,#d9edf8,#eef8fc 55%,#cfe6f4);
+  }
+  .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .piece{position:absolute;width:9px;height:18px;background:#73a9c8;animation:fall 4s linear infinite;opacity:.8}
+  .piece:nth-child(2n){background:#fff}.piece:nth-child(3n){background:#a8c8dc}
+  @keyframes fall{0%{transform:translateY(-20px) rotate(0);opacity:0}10%{opacity:.9}100%{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+  .video-screen{
+    background:
+      radial-gradient(circle at 50% 12%,rgba(255,255,255,.92),transparent 30%),
+      linear-gradient(145deg,#edf6fa,#f9fbfa 52%,#e2eef4);
+  }
+  .video-card{padding-top:38px;padding-bottom:38px}
+  .reveal-video{
+    display:block;width:min(340px,72vw);max-height:56svh;aspect-ratio:9/16;object-fit:contain;
+    margin:24px auto 0;border:7px solid white;background:#132330;
+    box-shadow:0 12px 34px rgba(24,63,97,.18);
+  }
+  .video-note{font-size:13px;font-style:italic;opacity:.72;margin:16px 0 0}
+  .final{
+    background:
+      linear-gradient(rgba(235,246,252,.45),rgba(235,246,252,.72)),
+      linear-gradient(180deg,#c5e0ee,#eaf5f8 65%,#b9d8e8);
+  }
+  .heart{font-size:28px;margin:12px 0}
+  .progress{position:fixed;top:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:10}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(24,63,97,.22)}
+  .dot.on{background:var(--ink)}
+  .hidden{display:none!important}
+  @media(max-width:600px){
+    .card{padding:44px 24px;min-height:calc(100svh - 48px)}
+    .choices{gap:12px}
+    .choice{width:145px;height:145px}
+    .body{font-size:16px}
+    .video-card{padding:34px 20px}
+    .reveal-video{width:min(310px,76vw);max-height:54svh}
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<section class="screen active" id="s1">
+  <div class="leaves"><div class="leaf a"></div><div class="leaf b"></div></div>
+  <div class="card">
+    <div class="eyebrow">A little secret is on the way</div>
+    <h1>Baby<br>Chavez</h1>
+    <div class="rule"></div>
+    <div class="date">April 2027</div>
+    <p class="body">We have something very special to share with you.<br><br>But before we reveal it, we want your guess.</p>
+    <button class="btn" onclick="go(2)">Enter the reveal →</button>
+  </div>
+</section>
+
+<section class="screen" id="s2">
+  <div class="card">
+    <div class="eyebrow">The secret</div>
+    <h2>What do you think?</h2>
+    <p class="body">For the past few months, we've been keeping something very close to our hearts.</p>
+    <div class="script" style="margin-top:24px">Who is joining the Chavez family?</div>
+    <div class="choices">
+      <button class="choice girl" onclick="guess('girl')"><span class="icon">♡</span>Girl</button>
+      <button class="choice boy" onclick="guess('boy')"><span class="icon">♡</span>Boy</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="s3">
+  <div class="card">
+    <div class="lock">♧</div>
+    <div class="eyebrow">Your guess is in.</div>
+    <h2>Locked in.</h2>
+    <p class="body">There's no going back now. 😉<br><br>Take one last breath…</p>
+    <div class="rule"></div>
+    <p class="script">Are you ready to meet Baby Chavez?</p>
+    <button class="btn" onclick="go(4)">Yes — reveal the secret →</button>
+  </div>
+</section>
+
+<section class="screen pause" id="s4">
+  <div class="card" style="background:rgba(255,255,255,.45)">
+    <div class="script">One little heartbeat…</div>
+    <div class="script" style="margin-top:28px">One tiny miracle…</div>
+    <div class="script" style="margin-top:28px">One very loved baby…</div>
+    <div class="rule" style="margin-top:38px"></div>
+    <div class="script">And now…</div>
+    <p class="body" style="margin-top:22px">the moment we've been waiting for.</p>
+    <button class="btn secondary" onclick="go(5)">Watch our surprise →</button>
+  </div>
+</section>
+
+<section class="screen video-screen" id="s5">
+  <div class="card video-card" style="background:rgba(251,253,253,.72)">
+    <div class="eyebrow">One more little moment</div>
+    <h2>Watch closely…</h2>
+    <p class="body">Someone very special has an announcement to share.</p>
+    <video class="reveal-video" id="revealVideo" controls playsinline preload="metadata" poster="video-poster.jpg" aria-label="Baby Chavez family reveal video">
+      <source src="Baby_Chavez_Reveal.mp4" type="video/mp4">
+      Your browser does not support embedded video.
+    </video>
+    <p class="video-note" id="videoHint" aria-live="polite">The reveal button will appear when the video ends.</p>
+    <button class="btn hidden" id="videoContinue" onclick="go(6)">Continue to the reveal →</button>
+  </div>
+</section>
+
+<section class="screen reveal" id="s6">
+  <div class="confetti" id="confetti"></div>
+  <div class="card" style="background:rgba(245,251,253,.74)">
+    <div class="eyebrow">The moment we've been waiting for</div>
+    <h2 id="revealTitle">IT'S A BOY!</h2>
+    <div class="date">Baby Chavez · Coming April 2027</div>
+    <p class="script" id="guessMessage">Our greatest adventure is just beginning.</p>
+    <div class="rule"></div>
+    <p class="body">We can't wait to meet him. ♡</p>
+    <button class="btn" onclick="go(7)">Continue →</button>
+  </div>
+</section>
+
+<section class="screen final" id="s7">
+  <div class="card" style="background:rgba(250,252,252,.62)">
+    <div class="eyebrow">A new chapter</div>
+    <h2>Our Little Boy</h2>
+    <div class="rule"></div>
+    <p class="script">Already so loved.<br><br>Already so wanted.<br><br>Already surrounded by a family waiting to meet him.</p>
+    <div class="rule"></div>
+    <div class="script">Baby Chavez</div>
+    <div class="date">April 2027</div>
+    <div class="heart">♡</div>
+    <button class="btn secondary" onclick="go(1)">Start over ↻</button>
+  </div>
+</section>
+
+<script>
+let current=1, guessValue=null;
+const total=7;
+const progress=document.getElementById('progress');
+const revealVideo=document.getElementById('revealVideo');
+const videoContinue=document.getElementById('videoContinue');
+const videoHint=document.getElementById('videoHint');
+function renderProgress(){
+  progress.innerHTML='';
+  for(let i=1;i<=total;i++){
+    const d=document.createElement('span');
+    d.className='dot '+(i===current?'on':'');
+    progress.appendChild(d);
+  }
+}
+function go(n){
+  if(current===5 && n!==5) revealVideo.pause();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  current=n; renderProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(n===5) prepareVideo();
+  if(n===6) startConfetti();
+}
+function guess(v){
+  guessValue=v;
+  sessionStorage.setItem('babyChavezGuess',v);
+  go(3);
+}
+function prepareVideo(){
+  revealVideo.currentTime=0;
+  videoContinue.classList.add('hidden');
+  videoHint.textContent='The reveal button will appear when the video ends.';
+  const playback=revealVideo.play();
+  if(playback){
+    playback.catch(()=>{
+      videoHint.textContent='Tap play to watch the announcement.';
+    });
+  }
+}
+revealVideo.addEventListener('ended',()=>{
+  videoHint.textContent='The secret is ready.';
+  videoContinue.classList.remove('hidden');
+});
+revealVideo.addEventListener('error',()=>{
+  videoHint.textContent='The video could not load, but you can still continue.';
+  videoContinue.classList.remove('hidden');
+});
+function startConfetti(){
+  const box=document.getElementById('confetti');
+  box.innerHTML='';
+  for(let i=0;i<45;i++){
+    const p=document.createElement('i');
+    p.className='piece';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDelay=(Math.random()*2)+'s';
+    p.style.animationDuration=(3+Math.random()*3)+'s';
+    p.style.transform='rotate('+Math.random()*360+'deg)';
+    box.appendChild(p);
+  }
+  const g=guessValue || sessionStorage.getItem('babyChavezGuess');
+  const msg=document.getElementById('guessMessage');
+  if(g==='boy'){
+    msg.textContent='You knew it all along. 💙';
+  }else if(g==='girl'){
+    msg.textContent='Nice guess… but we have a little surprise. 💙';
+  }else{
+    msg.textContent='Our greatest adventure is just beginning. 💙';
+  }
+}
+renderProgress();
+</script>
+</body>
+</html>
